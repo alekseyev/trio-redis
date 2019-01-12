@@ -44,7 +44,7 @@ class RedisConnection:
     async def send_command(self, command, *args):
         command_and_args = (serialize(arg) for arg in (atom(command),) + args)
         data = b" ".join(command_and_args) + b"\r\n"
-        await self.sock.sendall(data)
+        await self.sock.send(data)
 
     async def process_command(self, *command_and_args):
         await self.send_command(*command_and_args)
