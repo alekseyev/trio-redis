@@ -89,8 +89,14 @@ class Redis:
     async def set(self, key, value):
         return await self.conn.process_command_ok(b"SET", key, value)
 
+    async def expire(self, key, ttl):
+        return await self.conn.process_command(b"EXPIRE", key, str(ttl))
+
+    async def expireat(self, key, timestamp):
+        return await self.conn.process_command(b"EXPIREAT", key, str(timestamp))
+
     async def __aenter__(self):
         return await self.connect()
 
     async def __aexit__(self, exc_type, exc_value, traceback):
-        self.close()
+        await self.close()
